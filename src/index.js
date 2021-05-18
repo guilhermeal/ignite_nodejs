@@ -1,37 +1,24 @@
 const express = require('express');
+const { v4: uuidv4  } = require("uuid")
+
 const app = express();
-
-
 app.use(express.json());
 
-// ROTA DEFINIDA NA PRIMEIRA AULA
-app.get("/", (request, response) => {
-	return response.json({message: 'Hello world - Cara de fuinha'});
-});
+const customers = [];
 
-// METODO GET :: Vai ler todos os Cursos
-app.get("/courses", (request, response) => {
-	return response.json(['Curso 1', 'Curso 2', 'Curso 3']);
-});
+app.post("/account", (request, response) => {
+	const { cpf, name } = request.body;
+	const id = uuidv4();
 
-// METODO POST :: Vai adicionar um novo Curso (Curso 4)
-app.post("/courses", (request, response) => {
-	return response.json(['Curso 1', 'Curso 2', 'Curso 3', 'Curso 4']);
-});
+	customers.push({
+		cpf,
+		name,
+		id,
+		statement:[]
+	}); 
 
-// METODO PUT :: Vai Alterar um curso existente recebendo parametro :id (Alterar Curso 1 para Curso 6)
-app.put("/courses/:id", (request, response) => {
-	return response.json(['Curso 6', 'Curso 2', 'Curso 3', 'Curso 4']);
-});
+	return response.status(201).send(customers);
 
-// METODO PATCH :: Vai Alterar (simples) um curso existente recebendo parametro :id (Alterar Curso 2 para Curso 7)
-app.patch("/courses/:id", (request, response) => {
-	return response.json(['Curso 6', 'Curso 7', 'Curso 3', 'Curso 4']);
-});
-
-// METODO DELETE :: Vai Alterar (simples) um curso existente recebendo parametro :id (Alterar Curso 2 para Curso 7)
-app.delete("/courses/:id", (request, response) => {
-	return response.json(['Curso 6', 'Curso 7', 'Curso 4']);
 });
 
 app.listen(3333);
